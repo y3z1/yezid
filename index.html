@@ -6,323 +6,281 @@
 <title>Yezid Adarme — Logistics & Supply Chain</title>
 <meta name="description" content="Especialista en Logística Operativa, Order-to-Cash y Estandarización de Procesos con IA.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Barlow+Condensed:wght@400;600;700&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy:    #0c1929;
-    --navy2:   #112236;
-    --navy3:   #172d47;
-    --teal:    #00b4a0;
-    --teal2:   #00d4b8;
-    --white:   #ffffff;
-    --off:     #f0f4f8;
-    --muted:   rgba(255,255,255,0.5);
-    --faint:   rgba(255,255,255,0.08);
-    --line:    rgba(255,255,255,0.1);
-    --font:    'Barlow', sans-serif;
-    --cond:    'Barlow Condensed', sans-serif;
-    --mono:    'JetBrains Mono', monospace;
+    --ocean-deep:  #04152a;
+    --ocean-mid:   #072040;
+    --ocean-light: #0a2d58;
+    --ocean-surf:  #0e3d70;
+    --teal:        #00b8a0;
+    --teal2:       #00d4b8;
+    --teal-soft:   rgba(0,180,160,0.12);
+    --teal-line:   rgba(0,180,160,0.25);
+    --white:       #ffffff;
+    --off:         #e8f0f8;
+    --muted:       rgba(232,240,248,0.55);
+    --faint:       rgba(255,255,255,0.05);
+    --line:        rgba(255,255,255,0.08);
+    --krill:       #e03818;
+    --focus:       #4d9fff;
+    --mono:        'DM Mono', monospace;
+    --cond:        'Barlow Condensed', sans-serif;
+    --sans:        'Barlow', sans-serif;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--navy);
+    background: var(--ocean-deep);
     color: var(--white);
-    font-family: var(--font);
+    font-family: var(--sans);
+    font-weight: 300;
     font-size: 15px;
     line-height: 1.7;
-    overflow-x: hidden;
+    min-height: 100dvh;
     cursor: none;
+    overflow-x: hidden;
   }
 
-  /* ── CURSOR ── */
-  #cur {
-    width: 8px; height: 8px;
-    background: var(--teal2);
-    border-radius: 50%;
-    position: fixed; pointer-events: none; z-index: 9999;
-    transform: translate(-50%,-50%);
-    transition: transform 0.2s ease;
+  /* ── SKIP LINK ── */
+  .skip-link {
+    position: absolute; top: -100px; left: 1rem;
+    background: var(--focus); color: #fff;
+    padding: 8px 16px; border-radius: 3px;
+    font-size: 0.85rem; font-weight: 500;
+    text-decoration: none; z-index: 9999;
+    transition: top 0.2s;
   }
-  #cur-ring {
-    width: 32px; height: 32px;
-    border: 1px solid rgba(0,212,184,0.3);
-    border-radius: 50%;
-    position: fixed; pointer-events: none; z-index: 9998;
-    transform: translate(-50%,-50%);
+  .skip-link:focus { top: 1rem; }
+
+  /* ── KRILL CURSOR ── */
+  #krill-canvas {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 9000;
+    width: 100%; height: 100%;
   }
-  #cur.big { transform: translate(-50%,-50%) scale(2.5); opacity: 0.4; }
+
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 3px; }
+
+  /* ── OCEAN BG LAYERS ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(14,61,112,0.6) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(0,180,160,0.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
 
   /* ── NAV ── */
-  nav {
+  #topnav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    height: 64px;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 3rem;
-    transition: background 0.4s, border-color 0.4s;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 2.5rem; height: 64px;
     border-bottom: 1px solid transparent;
+    transition: background 0.4s, border-color 0.4s;
   }
-  nav.scrolled {
-    background: rgba(12,25,41,0.95);
-    backdrop-filter: blur(20px);
-    border-bottom-color: var(--line);
+  #topnav.scrolled {
+    background: rgba(4,21,42,0.96);
+    backdrop-filter: blur(16px);
+    border-color: var(--line);
   }
+
   .nav-logo {
-    font-family: var(--cond);
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--white);
-    text-decoration: none;
-    cursor: none;
+    font-family: var(--cond); font-size: 1.1rem;
+    font-weight: 700; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--white);
+    text-decoration: none; cursor: none;
+    display: flex; align-items: center; gap: 0.5rem;
   }
-  .nav-logo em { color: var(--teal2); font-style: normal; }
+  .nav-logo-dot { color: var(--teal2); }
+
   .nav-links { display: flex; gap: 2.5rem; list-style: none; }
   .nav-links a {
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--muted);
-    text-decoration: none;
-    cursor: none;
-    transition: color 0.2s;
+    font-family: var(--mono); font-size: 0.6rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; cursor: none;
+    transition: color 0.2s; min-height: 44px;
+    display: flex; align-items: center;
     position: relative;
   }
   .nav-links a::after {
-    content: '';
-    position: absolute; bottom: -3px; left: 0;
-    width: 0; height: 1px;
-    background: var(--teal2);
+    content: ''; position: absolute; bottom: 12px; left: 0;
+    width: 0; height: 1px; background: var(--teal2);
     transition: width 0.25s;
   }
   .nav-links a:hover, .nav-links a.active { color: var(--white); }
   .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+
   .lang-btn {
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    color: var(--teal2);
-    background: rgba(0,212,184,0.1);
-    border: 1px solid rgba(0,212,184,0.25);
-    border-radius: 100px;
-    padding: 0.3rem 0.9rem;
-    cursor: none;
-    transition: background 0.2s;
+    font-family: var(--mono); font-size: 0.6rem;
+    letter-spacing: 0.1em; color: var(--teal2);
+    background: var(--teal-soft); border: 1px solid var(--teal-line);
+    border-radius: 2px; padding: 6px 14px; cursor: none;
+    min-height: 36px; transition: background 0.2s;
   }
-  .lang-btn:hover { background: rgba(0,212,184,0.18); }
+  .lang-btn:hover { background: rgba(0,180,160,0.2); }
+
+  /* ── BILINGUAL ── */
+  [data-lang] { display: none; }
+  .lang-es [data-lang="es"], .lang-en [data-lang="en"] { display: block; }
+  span[data-lang] { display: inline; }
+  .lang-en span[data-lang="es"], .lang-es span[data-lang="en"] { display: none; }
 
   /* ── WRAP ── */
-  .wrap { max-width: 920px; margin: 0 auto; padding: 0 2.5rem; }
-
-  /* ── REVEAL ── */
-  .reveal {
-    opacity: 0; transform: translateY(24px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .reveal.on { opacity: 1; transform: none; }
-
-  /* ── SECTION LABEL ── */
-  .s-label {
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--teal2);
-    margin-bottom: 1rem;
-    display: flex; align-items: center; gap: 0.75rem;
-  }
-  .s-label::before { content: ''; width: 24px; height: 1px; background: var(--teal2); }
-
-  /* ── SECTION TITLE ── */
-  .s-title {
-    font-family: var(--cond);
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    line-height: 1.05;
-    margin-bottom: 3rem;
-    color: var(--white);
-  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 2.5rem; position: relative; z-index: 1; }
 
   /* ── HERO ── */
   #hero {
-    min-height: 100vh;
+    min-height: 100dvh;
     display: flex; align-items: center;
     padding-top: 64px;
-    background: linear-gradient(160deg, var(--navy3) 0%, var(--navy) 60%);
+    position: relative; overflow: hidden;
     border-bottom: 1px solid var(--line);
-    position: relative;
-    overflow: hidden;
-  }
-  #hero::before {
-    content: '';
-    position: absolute;
-    right: -100px; top: -100px;
-    width: 600px; height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,180,160,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  #hero::after {
-    content: '';
-    position: absolute;
-    left: -200px; bottom: -200px;
-    width: 700px; height: 700px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,100,200,0.06) 0%, transparent 70%);
-    pointer-events: none;
   }
 
-  .hero-inner { padding: 5rem 0; position: relative; z-index: 1; }
+  .hero-waves {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 120px; opacity: 0.15; pointer-events: none;
+  }
+
+  .hero-inner { padding: 5rem 0; }
 
   .hero-kicker {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--teal2);
-    margin-bottom: 1.75rem;
+    font-family: var(--mono); font-size: 0.62rem;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--teal2); margin-bottom: 1.75rem;
     display: flex; align-items: center; gap: 0.75rem;
-    opacity: 0; animation: up 0.9s ease 0.1s forwards;
+    opacity: 0; animation: up 0.8s ease 0.1s forwards;
   }
-  .hero-kicker::before { content: ''; width: 30px; height: 1px; background: var(--teal2); }
+  .hero-kicker::before { content: ''; width: 28px; height: 1px; background: var(--teal2); }
 
   .hero-name {
-    font-family: var(--cond);
-    font-size: clamp(4rem, 12vw, 8rem);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    line-height: 0.9;
-    margin-bottom: 2rem;
-    opacity: 0; animation: up 0.9s ease 0.25s forwards;
+    font-family: var(--cond); font-weight: 700;
+    font-size: clamp(4rem, 11vw, 8.5rem);
+    text-transform: uppercase; letter-spacing: 0.02em;
+    line-height: 0.9; margin-bottom: 2rem;
+    opacity: 0; animation: up 0.9s ease 0.2s forwards;
   }
-  .hero-name .dim {
-    display: block;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(255,255,255,0.2);
-    font-weight: 300;
+  .hero-name .outline {
+    display: block; color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.18);
   }
 
   .hero-tagline {
-    font-size: 1.05rem;
-    color: var(--muted);
-    font-weight: 300;
-    max-width: 500px;
-    margin-bottom: 2rem;
-    opacity: 0; animation: up 0.9s ease 0.4s forwards;
-    font-style: italic;
-  }
-
-  .hero-rotate {
-    display: inline-flex; align-items: center; gap: 0.6rem;
-    font-family: var(--mono); font-size: 0.7rem;
-    color: rgba(255,255,255,0.35);
+    font-size: 1rem; color: var(--muted); font-weight: 300;
+    font-style: italic; max-width: 480px;
     margin-bottom: 2.5rem;
-    opacity: 0; animation: up 0.9s ease 0.55s forwards;
+    opacity: 0; animation: up 0.8s ease 0.35s forwards;
   }
-  .rw { color: var(--teal2); min-width: 210px; transition: opacity 0.35s; }
-  .rw.fade { opacity: 0; }
 
   .hero-ctas {
     display: flex; gap: 1rem; flex-wrap: wrap;
-    margin-bottom: 3rem;
-    opacity: 0; animation: up 0.9s ease 0.7s forwards;
+    margin-bottom: 2.5rem;
+    opacity: 0; animation: up 0.8s ease 0.5s forwards;
   }
+
   .btn-p {
-    background: var(--teal);
-    color: var(--navy);
-    padding: 0.75rem 2rem;
-    border-radius: 2px;
-    text-decoration: none;
-    font-family: var(--cond);
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: none;
-    display: inline-block;
-    transition: background 0.2s, transform 0.2s;
+    background: var(--teal); color: var(--ocean-deep);
+    padding: 12px 28px; border-radius: 2px;
+    text-decoration: none; font-family: var(--cond);
+    font-size: 0.85rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: none; display: inline-flex; align-items: center;
+    min-height: 44px; transition: background 0.2s;
   }
-  .btn-p:hover { background: var(--teal2); transform: translateY(-2px); }
+  .btn-p:hover { background: var(--teal2); }
+
   .btn-s {
-    background: transparent;
-    color: var(--white);
-    padding: 0.75rem 2rem;
-    border-radius: 2px;
-    text-decoration: none;
-    font-family: var(--cond);
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border: 1px solid var(--line);
-    cursor: none;
-    display: inline-block;
-    transition: border-color 0.2s, color 0.2s;
+    background: transparent; color: var(--off);
+    padding: 12px 24px; border: 1px solid var(--line);
+    border-radius: 2px; text-decoration: none;
+    font-family: var(--cond); font-size: 0.85rem;
+    font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; cursor: none;
+    display: inline-flex; align-items: center;
+    min-height: 44px; transition: border-color 0.2s, color 0.2s;
   }
-  .btn-s:hover { border-color: rgba(0,212,184,0.4); color: var(--teal2); }
+  .btn-s:hover { border-color: var(--teal-line); color: var(--teal2); }
 
   .hero-loc {
-    font-family: var(--mono); font-size: 0.62rem;
+    font-family: var(--mono); font-size: 0.6rem;
     color: rgba(255,255,255,0.3); letter-spacing: 0.1em;
-    opacity: 0; animation: up 0.9s ease 0.85s forwards;
+    opacity: 0; animation: up 0.8s ease 0.65s forwards;
   }
   .hero-loc::before { content: '◎  '; color: var(--teal); }
 
   .hero-pills {
-    display: flex; gap: 0.75rem; flex-wrap: wrap;
-    margin-top: 4rem; padding-top: 2rem;
+    display: flex; gap: 0.6rem; flex-wrap: wrap;
+    margin-top: 3.5rem; padding-top: 2rem;
     border-top: 1px solid var(--line);
-    opacity: 0; animation: up 0.9s ease 1s forwards;
+    opacity: 0; animation: up 0.8s ease 0.8s forwards;
   }
   .pill {
+    font-family: var(--mono); font-size: 0.58rem;
+    padding: 4px 12px; border-radius: 2px;
+    border: 1px solid var(--line); color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+  .pill.now { border-color: var(--teal-line); color: var(--teal2); background: var(--teal-soft); }
+
+  /* ── SECTION ── */
+  section {
+    padding: 5.5rem 0;
+    border-bottom: 1px solid var(--line);
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    position: relative; z-index: 1;
+  }
+  section.visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { section { transition: none; opacity: 1; transform: none; } }
+
+  .s-label {
     font-family: var(--mono); font-size: 0.6rem;
-    padding: 0.28rem 0.85rem; border-radius: 2px;
-    border: 1px solid var(--line);
-    color: var(--muted); letter-spacing: 0.06em;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--teal2); margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 0.75rem;
   }
-  .pill.now { border-color: rgba(0,212,184,0.3); color: var(--teal2); background: rgba(0,212,184,0.07); }
+  .s-label::before { content: ''; width: 20px; height: 1px; background: var(--teal2); }
 
-  @keyframes up {
-    from { opacity: 0; transform: translateY(22px); }
-    to   { opacity: 1; transform: translateY(0); }
+  .s-title {
+    font-family: var(--cond); font-weight: 700;
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    text-transform: uppercase; letter-spacing: 0.04em;
+    line-height: 1; margin-bottom: 3rem; color: var(--white);
   }
-
-  /* ── SECTIONS alternate bg ── */
-  .sec-dark  { background: var(--navy);  padding: 6rem 0; border-bottom: 1px solid var(--line); }
-  .sec-mid   { background: var(--navy2); padding: 6rem 0; border-bottom: 1px solid var(--line); }
-  .sec-light { background: var(--navy3); padding: 6rem 0; border-bottom: 1px solid var(--line); }
 
   /* ── ABOUT ── */
-  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
-  .about-text p { color: var(--muted); font-weight: 300; margin-bottom: 1rem; }
-  .method { display: flex; gap: 1.25rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+  .about-text p { color: var(--muted); margin-bottom: 1rem; font-size: 0.9rem; line-height: 1.8; }
+
+  .method { display: flex; gap: 1.25rem; padding: 0.9rem 0; border-bottom: 1px solid var(--line); }
   .method:last-child { border-bottom: none; }
-  .method-n { font-family: var(--mono); font-size: 0.6rem; color: var(--teal); padding-top: 0.2rem; flex-shrink: 0; }
-  .method-t { font-size: 0.875rem; color: var(--muted); font-weight: 300; }
+  .m-n { font-family: var(--mono); font-size: 0.58rem; color: var(--teal); padding-top: 3px; flex-shrink: 0; }
+  .m-t { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
 
   /* ── TIMELINE ── */
   .timeline { position: relative; padding-left: 2rem; }
   .timeline::before {
-    content: ''; position: absolute;
-    left: 0; top: 10px; width: 1px;
-    height: calc(100% - 10px);
+    content: ''; position: absolute; left: 0; top: 8px;
+    width: 1px; height: calc(100% - 8px);
     background: linear-gradient(to bottom, var(--teal), transparent);
   }
-  .t-entry { position: relative; padding-left: 2.25rem; padding-bottom: 3.5rem; }
+
+  .t-entry {
+    position: relative; padding-left: 2.25rem; padding-bottom: 3.5rem;
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .t-entry.visible { opacity: 1; transform: none; }
   .t-entry:last-child { padding-bottom: 0; }
+
   .t-dot {
-    position: absolute; left: -2.4rem; top: 8px;
+    position: absolute; left: -2.4rem; top: 7px;
     width: 10px; height: 10px; border-radius: 50%;
-    background: var(--navy); border: 2px solid var(--teal);
+    background: var(--ocean-deep); border: 2px solid var(--line);
   }
   .t-entry.cur .t-dot {
     background: var(--teal2); border-color: var(--teal2);
@@ -335,23 +293,25 @@
   }
   @keyframes pulse { 0%{transform:scale(1);opacity:.7} 100%{transform:scale(2.5);opacity:0} }
 
-  .t-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.25rem; }
+  .t-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.25rem; }
   .t-role { font-family: var(--cond); font-size: 1.15rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
-  .t-date { font-family: var(--mono); font-size: 0.6rem; color: rgba(255,255,255,0.3); letter-spacing: 0.07em; padding-top: 0.3rem; white-space: nowrap; }
-  .t-co { font-size: 0.82rem; color: var(--teal); font-weight: 500; margin-bottom: 0.75rem; }
+  .t-date { font-family: var(--mono); font-size: 0.58rem; color: rgba(255,255,255,0.28); letter-spacing: 0.07em; white-space: nowrap; padding-top: 3px; }
+  .t-co { font-size: 0.8rem; color: var(--teal); font-weight: 500; margin-bottom: 0.75rem; }
+
   .cur-badge {
     display: inline-flex; align-items: center; gap: 0.4rem;
-    background: rgba(0,212,184,0.1); border: 1px solid rgba(0,212,184,0.25);
-    border-radius: 2px; padding: 0.2rem 0.7rem;
-    font-family: var(--mono); font-size: 0.58rem;
-    color: var(--teal2); letter-spacing: 0.1em; text-transform: uppercase;
-    margin-bottom: 1rem;
+    background: var(--teal-soft); border: 1px solid var(--teal-line);
+    border-radius: 2px; padding: 3px 10px;
+    font-family: var(--mono); font-size: 0.56rem;
+    color: var(--teal2); letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 0.75rem;
   }
   .cur-badge::before { content: ''; width: 5px; height: 5px; background: var(--teal2); border-radius: 50%; animation: blink 1.5s ease infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
   .t-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
-  .t-list li { font-size: 0.875rem; color: var(--muted); font-weight: 300; padding-left: 1rem; position: relative; }
-  .t-list li::before { content: '—'; position: absolute; left: 0; color: rgba(255,255,255,0.2); font-size: 0.7rem; }
+  .t-list li { font-size: 0.85rem; color: var(--muted); padding-left: 1rem; position: relative; line-height: 1.7; }
+  .t-list li::before { content: '—'; position: absolute; left: 0; color: rgba(255,255,255,0.15); }
 
   /* ── EDUCATION ── */
   .edu-list { display: flex; flex-direction: column; gap: 1px; }
@@ -359,385 +319,374 @@
     background: var(--faint); border: 1px solid var(--line);
     padding: 1.25rem 1.75rem;
     display: flex; justify-content: space-between; align-items: center; gap: 1rem;
-    transition: background 0.2s, border-color 0.2s;
+    transition: background 0.2s, border-color 0.2s; min-height: 60px;
   }
-  .edu-item:hover { background: rgba(255,255,255,0.06); border-color: rgba(0,212,184,0.2); }
-  .edu-deg { font-size: 0.9rem; font-weight: 500; }
-  .edu-inst { font-family: var(--mono); font-size: 0.6rem; color: var(--teal); letter-spacing: 0.05em; white-space: nowrap; }
+  .edu-item:hover { background: rgba(0,180,160,0.07); border-color: var(--teal-line); }
+  .edu-deg { font-size: 0.9rem; font-weight: 400; }
+  .edu-inst { font-family: var(--mono); font-size: 0.58rem; color: var(--teal); letter-spacing: 0.06em; white-space: nowrap; }
 
   /* ── SKILLS ── */
   .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
-  .sg-label { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.18em; color: rgba(255,255,255,0.3); margin-bottom: 1.25rem; }
-  .sk { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0; border-bottom: 1px solid var(--line); font-size: 0.875rem; color: var(--muted); font-weight: 300; }
+  .sg-label { font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.18em; color: rgba(255,255,255,0.25); margin-bottom: 1.25rem; }
+  .sk { display: flex; align-items: center; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--line); font-size: 0.85rem; color: var(--muted); }
   .sk:last-child { border-bottom: none; }
   .sk::before { content: ''; width: 4px; height: 4px; background: var(--teal); border-radius: 50%; flex-shrink: 0; }
-  .lang-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--line); font-size: 0.875rem; }
+  .lang-row { display: flex; justify-content: space-between; align-items: center; padding: 0.55rem 0; border-bottom: 1px solid var(--line); font-size: 0.85rem; color: var(--muted); }
   .lang-row:last-child { border-bottom: none; }
-  .lang-row .lv { font-family: var(--mono); font-size: 0.6rem; color: var(--teal); letter-spacing: 0.05em; }
+  .lv { font-family: var(--mono); font-size: 0.58rem; color: var(--teal); }
 
   /* ── HIGHLIGHTS ── */
   .hl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); }
   .hl-card {
-    background: var(--navy2); padding: 2.25rem;
+    background: var(--ocean-mid); padding: 2.25rem;
     position: relative; overflow: hidden;
-    transition: background 0.2s;
+    transition: background 0.25s;
   }
-  .hl-card:hover { background: var(--navy3); }
+  .hl-card:hover { background: var(--ocean-light); }
   .hl-card::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
     background: var(--teal2); transform: scaleX(0); transform-origin: left;
     transition: transform 0.35s ease;
   }
   .hl-card:hover::before { transform: scaleX(1); }
-  .hl-num { font-family: var(--mono); font-size: 0.58rem; color: rgba(255,255,255,0.2); letter-spacing: 0.1em; margin-bottom: 1rem; }
+  .hl-num { font-family: var(--mono); font-size: 0.56rem; color: rgba(255,255,255,0.18); letter-spacing: 0.12em; margin-bottom: 1rem; }
   .hl-title { font-family: var(--cond); font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem; }
-  .hl-desc { font-size: 0.82rem; color: var(--muted); font-weight: 300; line-height: 1.65; }
+  .hl-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
 
   /* ── CONTACT ── */
-  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
-  .contact-info p { color: var(--muted); font-weight: 300; margin-bottom: 2rem; font-size: 1rem; }
-  .c-links { display: flex; flex-direction: column; gap: 0.75rem; }
-  .c-link { display: flex; align-items: center; gap: 0.85rem; color: var(--muted); text-decoration: none; font-size: 0.875rem; cursor: none; transition: color 0.2s; }
-  .c-link:hover { color: var(--teal2); }
-  .c-icon { font-family: var(--mono); font-size: 0.6rem; color: var(--teal); width: 18px; }
-  .c-form { display: flex; flex-direction: column; gap: 1rem; }
-  .f-group { display: flex; flex-direction: column; gap: 0.4rem; }
-  .f-label { font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.3); }
-  .f-input, .f-ta {
-    background: var(--faint); border: 1px solid var(--line);
-    border-radius: 2px; padding: 0.7rem 1rem;
-    color: var(--white); font-family: var(--font); font-size: 0.875rem;
-    outline: none; transition: border-color 0.2s; cursor: none; resize: none;
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+  .contact-info p { color: var(--muted); margin-bottom: 2rem; font-size: 0.9rem; line-height: 1.8; }
+  .c-links { display: flex; flex-direction: column; }
+  .c-link {
+    display: flex; align-items: center; gap: 1rem;
+    color: var(--muted); text-decoration: none;
+    font-size: 0.85rem; cursor: none;
+    padding: 0.85rem 0; border-bottom: 1px solid var(--line);
+    transition: color 0.2s; min-height: 44px;
   }
-  .f-input:focus, .f-ta:focus { border-color: rgba(0,212,184,0.35); }
-  .f-ta { min-height: 120px; }
+  .c-link:last-child { border-bottom: none; }
+  .c-link:hover { color: var(--teal2); }
+  .c-icon { font-family: var(--mono); font-size: 0.58rem; color: var(--teal); min-width: 20px; }
+
+  .c-form { display: flex; flex-direction: column; gap: 1.25rem; }
+  .f-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .f-label { font-family: var(--mono); font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.16em; color: rgba(255,255,255,0.28); }
+  .f-input, .f-ta {
+    background: transparent; border: none;
+    border-bottom: 1px solid var(--line);
+    padding: 0.6rem 0; color: var(--white);
+    font-family: var(--sans); font-size: 0.88rem;
+    font-weight: 300; outline: none; resize: none;
+    transition: border-color 0.25s; min-height: 44px;
+  }
+  .f-input:focus, .f-ta:focus { border-color: var(--teal); }
+  .f-ta { min-height: 90px; }
   .f-btn {
-    background: var(--teal); color: var(--navy);
-    border: none; border-radius: 2px;
-    padding: 0.75rem 2rem;
+    background: var(--teal); color: var(--ocean-deep);
+    border: none; border-radius: 2px; padding: 12px 28px;
     font-family: var(--cond); font-size: 0.85rem; font-weight: 700;
     letter-spacing: 0.1em; text-transform: uppercase;
-    cursor: none; align-self: flex-start;
-    transition: background 0.2s, transform 0.2s;
+    cursor: none; align-self: flex-start; min-height: 44px;
+    transition: background 0.2s;
   }
-  .f-btn:hover { background: var(--teal2); transform: translateY(-2px); }
+  .f-btn:hover { background: var(--teal2); }
 
   /* ── FOOTER ── */
-  footer { background: var(--navy); border-top: 1px solid var(--line); padding: 2rem 0; }
-  .foot { max-width: 920px; margin: 0 auto; padding: 0 2.5rem; display: flex; justify-content: space-between; align-items: center; }
-  .foot-copy { font-family: var(--mono); font-size: 0.58rem; color: rgba(255,255,255,0.25); letter-spacing: 0.1em; }
+  footer {
+    position: relative; z-index: 1;
+    padding: 2rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .foot {
+    max-width: 960px; margin: 0 auto; padding: 0 2.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .foot-copy { font-family: var(--mono); font-size: 0.56rem; color: rgba(255,255,255,0.22); letter-spacing: 0.12em; }
   .foot-dot { color: var(--teal); margin: 0 0.5rem; }
 
-  /* ── BILINGUAL ── */
-  [data-lang] { display: none; }
-  .lang-es [data-lang="es"], .lang-en [data-lang="en"] { display: block; }
-  span[data-lang] { display: inline; }
-  .lang-en span[data-lang="es"], .lang-es span[data-lang="en"] { display: none; }
+  /* ── KEYFRAMES ── */
+  @keyframes up { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
 
-  /* ── MOBILE ── */
+  /* ── RESPONSIVE ── */
   @media (max-width: 720px) {
-    nav { padding: 0 1.25rem; }
+    #topnav { padding: 0 1.25rem; }
     .nav-links { display: none; }
     .wrap { padding: 0 1.25rem; }
-    .sec-dark, .sec-mid, .sec-light { padding: 3.5rem 0; }
+    section { padding: 3.5rem 0; }
     .about-grid, .skills-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
     .hl-grid { grid-template-columns: 1fr; }
-    #cur, #cur-ring { display: none; }
     body { cursor: auto; }
+    #krill-canvas { display: none; }
     a, button { cursor: pointer; }
   }
 </style>
 </head>
-
 <body class="lang-es">
-<div id="cur"></div>
-<div id="cur-ring"></div>
+
+<a class="skip-link" href="#main-content">Saltar al contenido</a>
+<canvas id="krill-canvas" aria-hidden="true"></canvas>
 
 <!-- NAV -->
-<nav id="nav">
-  <a href="#hero" class="nav-logo">YA<em>.</em></a>
-  <ul class="nav-links">
+<nav id="topnav" aria-label="Navegación principal">
+  <a href="#hero" class="nav-logo">YA<span class="nav-logo-dot">.</span></a>
+  <ul class="nav-links" role="list">
     <li><a href="#about"      data-s="about"><span data-lang="es">Sobre mí</span><span data-lang="en">About</span></a></li>
     <li><a href="#experience" data-s="experience"><span data-lang="es">Experiencia</span><span data-lang="en">Experience</span></a></li>
     <li><a href="#education"  data-s="education"><span data-lang="es">Formación</span><span data-lang="en">Education</span></a></li>
     <li><a href="#skills"     data-s="skills"><span data-lang="es">Habilidades</span><span data-lang="en">Skills</span></a></li>
-    <li><a href="#projects"   data-s="projects"><span data-lang="es">Logros</span><span data-lang="en">Highlights</span></a></li>
+    <li><a href="#highlights" data-s="highlights"><span data-lang="es">Logros</span><span data-lang="en">Highlights</span></a></li>
     <li><a href="#contact"    data-s="contact"><span data-lang="es">Contacto</span><span data-lang="en">Contact</span></a></li>
   </ul>
-  <button class="lang-btn" id="lang-btn">EN</button>
+  <button class="lang-btn" id="lang-btn" aria-label="Cambiar idioma">EN</button>
 </nav>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="wrap">
-    <div class="hero-inner">
-      <div class="hero-kicker">
-        <span data-lang="es">Especialista en Operaciones Logísticas</span>
-        <span data-lang="en">Logistics Operations Specialist</span>
-      </div>
-      <h1 class="hero-name">
-        Yezid<br>
-        <span class="dim">Adarme</span>
-      </h1>
-      <p class="hero-tagline">
-        <span data-lang="es">Operaciones que fluyen. Procesos que escalan.</span>
-        <span data-lang="en">Operations that flow. Processes that scale.</span>
-      </p>
-      <div class="hero-rotate">
-        <span>→</span>
-        <span class="rw" id="rw">Fiabilidad Operativa</span>
-      </div>
-      <div class="hero-ctas">
-        <a href="#experience" class="btn-p"><span data-lang="es">Ver trayectoria</span><span data-lang="en">View experience</span></a>
-        <a href="#contact"    class="btn-s"><span data-lang="es">Contactar</span><span data-lang="en">Get in touch</span></a>
-      </div>
-      <p class="hero-loc">
-        <span data-lang="es">Reus (Tarragona) · Disponibilidad para movilidad</span>
-        <span data-lang="en">Reus (Tarragona) · Open to mobility</span>
-      </p>
-      <div class="hero-pills">
-        <span class="pill now">Aker BioMarine</span>
-        <span class="pill">Ronnefeldt</span>
-        <span class="pill">Kuehne+Nagel</span>
-        <span class="pill">Amazon 3PL</span>
+<main id="main-content">
+
+  <!-- HERO -->
+  <section id="hero" aria-label="Presentación">
+    <svg class="hero-waves" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,60 C240,100 480,20 720,60 C960,100 1200,20 1440,60 L1440,120 L0,120 Z" fill="rgba(0,180,160,1)"/>
+      <path d="M0,80 C360,40 720,100 1080,60 C1260,40 1380,70 1440,80 L1440,120 L0,120 Z" fill="rgba(14,61,112,0.8)"/>
+    </svg>
+    <div class="wrap">
+      <div class="hero-inner">
+        <div class="hero-kicker">
+          <span data-lang="es">Especialista en Operaciones Logísticas</span>
+          <span data-lang="en">Logistics Operations Specialist</span>
+        </div>
+        <h1 class="hero-name">
+          Yezid<br>
+          <span class="outline">Adarme</span>
+        </h1>
+        <p class="hero-tagline">
+          <span data-lang="es">Operaciones que fluyen. Procesos que escalan.</span>
+          <span data-lang="en">Operations that flow. Processes that scale.</span>
+        </p>
+        <div class="hero-ctas">
+          <a href="#experience" class="btn-p"><span data-lang="es">Ver trayectoria</span><span data-lang="en">View experience</span></a>
+          <a href="#contact"    class="btn-s"><span data-lang="es">Contactar</span><span data-lang="en">Get in touch</span></a>
+        </div>
+        <p class="hero-loc">
+          <span data-lang="es">Reus (Tarragona) · Disponibilidad para movilidad</span>
+          <span data-lang="en">Reus (Tarragona) · Open to mobility</span>
+        </p>
+        <div class="hero-pills">
+          <span class="pill now">Aker BioMarine</span>
+          <span class="pill">Ronnefeldt</span>
+          <span class="pill">Kuehne+Nagel</span>
+          <span class="pill">Amazon 3PL</span>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ABOUT -->
-<section id="about" class="sec-dark">
-  <div class="wrap">
-    <div class="reveal">
+  <!-- ABOUT -->
+  <section id="about" aria-labelledby="about-title">
+    <div class="wrap">
       <div class="s-label"><span data-lang="es">Sobre mí</span><span data-lang="en">About</span></div>
-      <h2 class="s-title"><span data-lang="es">Qué hago</span><span data-lang="en">What I do</span></h2>
-    </div>
-    <div class="about-grid">
-      <div class="about-text reveal">
-        <p data-lang="es">Especialista en operaciones logísticas con más de 10 años de experiencia en entornos internacionales de alta exigencia (Kuehne+Nagel – Amazon 3PL, distribución premium y e-commerce).</p>
-        <p data-lang="es">Experiencia dando soporte al ciclo completo del pedido, incluyendo coordinación de expediciones, precisión documental y comunicación transversal entre departamentos.</p>
-        <p data-lang="es">Actualmente trabajo combinando gestión del ciclo order-to-cash con estandarización de procesos asistida por IA.</p>
-        <p data-lang="en">Logistics operations specialist with over 10 years of experience in demanding international environments (Kuehne+Nagel – Amazon 3PL, premium distribution and e-commerce).</p>
-        <p data-lang="en">Experience supporting the complete order cycle, including shipment coordination, documentation accuracy, and cross-functional communication between departments.</p>
-        <p data-lang="en">Currently combining order-to-cash cycle management with AI-assisted process standardization.</p>
-      </div>
-      <div class="reveal">
-        <div class="method"><span class="method-n">01</span><span class="method-t"><span data-lang="es">Análisis de causa raíz (RCA) aplicado a incidencias reales.</span><span data-lang="en">Root cause analysis (RCA) applied to real incidents.</span></span></div>
-        <div class="method"><span class="method-n">02</span><span class="method-t"><span data-lang="es">Acciones correctivas y preventivas (CAPA) orientadas a resultados.</span><span data-lang="en">Corrective and preventive actions (CAPA) focused on results.</span></span></div>
-        <div class="method"><span class="method-n">03</span><span class="method-t"><span data-lang="es">Seguimiento de KPIs operativos: calidad, precisión y tiempos.</span><span data-lang="en">Monitoring operational KPIs: quality, accuracy and timing.</span></span></div>
-        <div class="method"><span class="method-n">04</span><span class="method-t"><span data-lang="es">Estandarización de procesos (SOPs) con ayuda de IA.</span><span data-lang="en">Process standardization (SOPs) with AI assistance.</span></span></div>
+      <h2 class="s-title" id="about-title"><span data-lang="es">Qué hago</span><span data-lang="en">What I do</span></h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p data-lang="es">Especialista en operaciones logísticas con más de 10 años de experiencia en entornos internacionales de alta exigencia — desde Amazon 3PL hasta biotech marina global.</p>
+          <p data-lang="es">Actualmente en Aker BioMarine ASA, combinando gestión del ciclo Order-to-Cash con estandarización de procesos asistida por IA.</p>
+          <p data-lang="en">Logistics operations specialist with over 10 years of experience in demanding international environments — from Amazon 3PL to global marine biotech.</p>
+          <p data-lang="en">Currently at Aker BioMarine ASA, combining Order-to-Cash cycle management with AI-assisted process standardization.</p>
+        </div>
+        <div>
+          <div class="method"><span class="m-n">01</span><span class="m-t"><span data-lang="es">Root Cause Analysis (RCA) aplicado a incidencias reales.</span><span data-lang="en">Root Cause Analysis (RCA) applied to real incidents.</span></span></div>
+          <div class="method"><span class="m-n">02</span><span class="m-t"><span data-lang="es">Acciones correctivas y preventivas (CAPA) orientadas a resultados.</span><span data-lang="en">Corrective and preventive actions (CAPA) focused on results.</span></span></div>
+          <div class="method"><span class="m-n">03</span><span class="m-t"><span data-lang="es">Seguimiento de KPIs operativos: calidad, precisión y tiempos.</span><span data-lang="en">Monitoring operational KPIs: quality, accuracy and timing.</span></span></div>
+          <div class="method"><span class="m-n">04</span><span class="m-t"><span data-lang="es">Estandarización de procesos (SOPs) con ayuda de IA.</span><span data-lang="en">Process standardization (SOPs) with AI assistance.</span></span></div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- EXPERIENCE -->
-<section id="experience" class="sec-mid">
-  <div class="wrap">
-    <div class="reveal">
+  <!-- EXPERIENCE -->
+  <section id="experience" aria-labelledby="exp-title">
+    <div class="wrap">
       <div class="s-label"><span data-lang="es">Trayectoria</span><span data-lang="en">Experience</span></div>
-      <h2 class="s-title"><span data-lang="es">Experiencia profesional</span><span data-lang="en">Work experience</span></h2>
+      <h2 class="s-title" id="exp-title"><span data-lang="es">Experiencia profesional</span><span data-lang="en">Work experience</span></h2>
+      <div class="timeline">
+        <article class="t-entry cur">
+          <div class="t-dot" aria-hidden="true"></div>
+          <div class="t-head">
+            <span class="t-role">Customer Care Representative</span>
+            <span class="t-date">Mar 2026 – <span data-lang="es">Presente</span><span data-lang="en">Present</span></span>
+          </div>
+          <p class="t-co">Aker BioMarine ASA · Oslo HQ · Remote</p>
+          <span class="cur-badge"><span data-lang="es">Actual</span><span data-lang="en">Current</span></span>
+          <ul class="t-list">
+            <li data-lang="es">Gestión integral del ciclo Order-to-Cash en empresa biotecnológica marina de referencia global.</li>
+            <li data-lang="es">Coordinación de pedidos internacionales, documentación de exportación y comunicación con clientes B2B en múltiples zonas horarias.</li>
+            <li data-lang="es">Estandarización de procesos internos mediante IA, documentando SOPs y reduciendo fricción operativa.</li>
+            <li data-lang="en">Full management of the Order-to-Cash cycle at a globally recognized marine biotech company.</li>
+            <li data-lang="en">Coordination of international orders, export documentation and B2B client communication across multiple time zones.</li>
+            <li data-lang="en">AI-assisted standardization of internal processes, documenting SOPs and reducing operational friction.</li>
+          </ul>
+        </article>
+        <article class="t-entry">
+          <div class="t-dot" aria-hidden="true"></div>
+          <div class="t-head">
+            <span class="t-role">Warehouse Manager</span>
+            <span class="t-date">Oct 2024 – Dec 2025</span>
+          </div>
+          <p class="t-co">Ronnefeldt World of Tea · Dublin</p>
+          <ul class="t-list">
+            <li data-lang="es">Diseño e implantación del sistema Bin Location — reducción del 50% en tiempos de picking.</li>
+            <li data-lang="es">Sincronización entre stock físico y Shopify, eliminando discrepancias en ventas online.</li>
+            <li data-lang="es">Rediseño integral de flujos de recepción, almacenaje y expedición.</li>
+            <li data-lang="en">Design and implementation of Bin Location system — 50% reduction in picking times.</li>
+            <li data-lang="en">Synchronization between physical stock and Shopify, eliminating online sales discrepancies.</li>
+            <li data-lang="en">Complete redesign of receiving, storage, and dispatch workflows.</li>
+          </ul>
+        </article>
+        <article class="t-entry">
+          <div class="t-dot" aria-hidden="true"></div>
+          <div class="t-head">
+            <span class="t-role">Stock Controller</span>
+            <span class="t-date">Feb 2025 – Aug 2025</span>
+          </div>
+          <p class="t-co">Masterlink · Dublin</p>
+          <ul class="t-list">
+            <li data-lang="es">Conteos cíclicos estratégicos para detección temprana de desviaciones de inventario.</li>
+            <li data-lang="en">Strategic cycle counts for early detection of inventory deviations.</li>
+          </ul>
+        </article>
+        <article class="t-entry">
+          <div class="t-dot" aria-hidden="true"></div>
+          <div class="t-head">
+            <span class="t-role">Problem Solver & Concessions Specialist</span>
+            <span class="t-date">Jul 2018 – Mar 2023</span>
+          </div>
+          <p class="t-co">Kuehne+Nagel (Amazon 3PL) · Constantí</p>
+          <ul class="t-list">
+            <li data-lang="es">Resolución de incidencias críticas aplicando Root Cause Analysis (RCA) sistemático.</li>
+            <li data-lang="es">Gestión de pérdidas y daños (Concessions), minimizando impacto operativo y económico.</li>
+            <li data-lang="es">KPIs estrictos de precisión, calidad y tiempos en entorno de alto volumen.</li>
+            <li data-lang="en">Critical incident resolution using systematic Root Cause Analysis (RCA).</li>
+            <li data-lang="en">Loss and damage management (Concessions), minimizing operational and financial impact.</li>
+            <li data-lang="en">Strict KPIs for accuracy, quality and timing in high-volume environments.</li>
+          </ul>
+        </article>
+      </div>
     </div>
-    <div class="timeline">
+  </section>
 
-      <div class="t-entry cur reveal">
-        <div class="t-dot"></div>
-        <div class="t-head">
-          <span class="t-role">Customer Care Representative</span>
-          <span class="t-date">Mar 2026 – <span data-lang="es">Presente</span><span data-lang="en">Present</span></span>
-        </div>
-        <div class="t-co">Aker BioMarine ASA · <span style="color:rgba(255,255,255,0.25);font-size:0.78rem;">Oslo, Norway HQ · Remote</span></div>
-        <span class="cur-badge"><span data-lang="es">Actual</span><span data-lang="en">Current</span></span>
-        <ul class="t-list">
-          <li data-lang="es">Gestión integral del ciclo Order-to-Cash en empresa biotecnológica marina de referencia global (ingredientes omega-3 de krill antártico).</li>
-          <li data-lang="es">Coordinación de pedidos internacionales, documentación de exportación y comunicación transversal con clientes B2B en múltiples zonas horarias.</li>
-          <li data-lang="es">Estandarización activa de procesos internos mediante el uso de IA, documentando SOPs y reduciendo fricción operativa.</li>
-          <li data-lang="es">Trabajo bajo KPIs de tiempo de respuesta, precisión documental y satisfacción del cliente.</li>
-          <li data-lang="en">Full management of the Order-to-Cash cycle at a globally recognized marine biotech company (Antarctic krill omega-3 ingredients).</li>
-          <li data-lang="en">Coordination of international orders, export documentation and cross-functional communication with B2B clients across multiple time zones.</li>
-          <li data-lang="en">Active standardization of internal processes using AI tools, documenting SOPs and reducing operational friction.</li>
-          <li data-lang="en">Working under KPIs for response time, documentation accuracy and customer satisfaction.</li>
-        </ul>
-      </div>
-
-      <div class="t-entry reveal">
-        <div class="t-dot"></div>
-        <div class="t-head">
-          <span class="t-role">Warehouse Manager</span>
-          <span class="t-date">Oct 2024 – Dec 2025</span>
-        </div>
-        <div class="t-co">Ronnefeldt World of Tea · Dublin</div>
-        <ul class="t-list">
-          <li data-lang="es">Responsable de la fiabilidad operativa y precisión de inventario en empresa de distribución premium con canal e-commerce.</li>
-          <li data-lang="es">Diseño e implantación del sistema Bin Location, logrando una reducción del 50% en los tiempos de picking.</li>
-          <li data-lang="es">Sincronización entre stock físico y Shopify, eliminando discrepancias que afectaban ventas online.</li>
-          <li data-lang="es">Rediseño integral de flujos de recepción, almacenaje y expedición.</li>
-          <li data-lang="en">Responsible for operational reliability and inventory accuracy in a premium distribution company with e-commerce channel.</li>
-          <li data-lang="en">Design and implementation of Bin Location system, achieving 50% reduction in picking times.</li>
-          <li data-lang="en">Synchronization between physical stock and Shopify, eliminating discrepancies that affected online sales.</li>
-          <li data-lang="en">Complete redesign of receiving, storage, and dispatch workflows.</li>
-        </ul>
-      </div>
-
-      <div class="t-entry reveal">
-        <div class="t-dot"></div>
-        <div class="t-head">
-          <span class="t-role">Stock Controller <span style="font-weight:300;font-size:0.85rem;opacity:0.4">(Weekend)</span></span>
-          <span class="t-date">Feb 2025 – Aug 2025</span>
-        </div>
-        <div class="t-co">Masterlink · Dublin</div>
-        <ul class="t-list">
-          <li data-lang="es">Ejecución de conteos cíclicos estratégicos para detección temprana de desviaciones de inventario.</li>
-          <li data-lang="es">Resolución de incidencias antes del reinicio de operativa semanal.</li>
-          <li data-lang="en">Execution of strategic cycle counts for early detection of inventory deviations.</li>
-          <li data-lang="en">Resolution of incidents before weekly operations restart.</li>
-        </ul>
-      </div>
-
-      <div class="t-entry reveal">
-        <div class="t-dot"></div>
-        <div class="t-head">
-          <span class="t-role">Problem Solver & Concessions Specialist</span>
-          <span class="t-date">Jul 2018 – Mar 2023</span>
-        </div>
-        <div class="t-co">Kuehne+Nagel (Amazon 3PL) · Constantí</div>
-        <ul class="t-list">
-          <li data-lang="es">Resolución de incidencias críticas, muchas capaces de bloquear decenas de pedidos.</li>
-          <li data-lang="es">Aplicación sistemática de Root Cause Analysis (RCA) para eliminar fallos recurrentes.</li>
-          <li data-lang="es">Gestión de incidencias por pérdidas y daños (Concessions), minimizando el impacto operativo y económico.</li>
-          <li data-lang="es">Trabajo bajo KPIs estrictos de precisión, calidad y tiempos en entorno de altísima exigencia.</li>
-          <li data-lang="en">Resolution of critical incidents, many capable of blocking dozens of orders.</li>
-          <li data-lang="en">Systematic application of Root Cause Analysis (RCA) to eliminate recurring failures.</li>
-          <li data-lang="en">Management of loss and damage incidents (Concessions), minimizing operational and financial impact.</li>
-          <li data-lang="en">Work under strict KPIs for accuracy, quality and timing in highly demanding environments.</li>
-        </ul>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- EDUCATION -->
-<section id="education" class="sec-light">
-  <div class="wrap">
-    <div class="reveal">
+  <!-- EDUCATION -->
+  <section id="education" aria-labelledby="edu-title">
+    <div class="wrap">
       <div class="s-label"><span data-lang="es">Formación</span><span data-lang="en">Education</span></div>
-      <h2 class="s-title"><span data-lang="es">Formación relevante</span><span data-lang="en">Relevant education</span></h2>
+      <h2 class="s-title" id="edu-title"><span data-lang="es">Formación relevante</span><span data-lang="en">Relevant education</span></h2>
+      <div class="edu-list" role="list">
+        <div class="edu-item" role="listitem">
+          <span class="edu-deg"><span data-lang="es">Máster en IA aplicada a Compras y Supply Chain</span><span data-lang="en">Master's in AI applied to Procurement & Supply Chain</span></span>
+          <span class="edu-inst">Founderz · <span data-lang="es">En curso</span><span data-lang="en">In progress</span></span>
+        </div>
+        <div class="edu-item" role="listitem">
+          <span class="edu-deg"><span data-lang="es">Gestión y Organización de Almacenes (Cert. Profesionalidad)</span><span data-lang="en">Warehouse Management & Organization (Professional Certificate)</span></span>
+          <span class="edu-inst">SOC · 2024</span>
+        </div>
+        <div class="edu-item" role="listitem">
+          <span class="edu-deg">Web Development with Python</span>
+          <span class="edu-inst">IBM SkillsBuild · 2024</span>
+        </div>
+      </div>
     </div>
-    <div class="edu-list reveal">
-      <div class="edu-item">
-        <span class="edu-deg"><span data-lang="es">Máster en IA aplicada a Compras y Supply Chain</span><span data-lang="en">Master's in AI applied to Procurement & Supply Chain</span></span>
-        <span class="edu-inst">Founderz · <span data-lang="es">En curso</span><span data-lang="en">In progress</span></span>
-      </div>
-      <div class="edu-item">
-        <span class="edu-deg"><span data-lang="es">Gestión y Organización de Almacenes (Cert. Profesionalidad)</span><span data-lang="en">Warehouse Management & Organization (Professional Certificate)</span></span>
-        <span class="edu-inst">SOC · 2024</span>
-      </div>
-      <div class="edu-item">
-        <span class="edu-deg">Web Development with Python</span>
-        <span class="edu-inst">IBM SkillsBuild · 2024</span>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- SKILLS -->
-<section id="skills" class="sec-dark">
-  <div class="wrap">
-    <div class="reveal">
+  <!-- SKILLS -->
+  <section id="skills" aria-labelledby="skills-title">
+    <div class="wrap">
       <div class="s-label"><span data-lang="es">Competencias</span><span data-lang="en">Skills</span></div>
-      <h2 class="s-title"><span data-lang="es">Habilidades e idiomas</span><span data-lang="en">Skills & languages</span></h2>
-    </div>
-    <div class="skills-grid">
-      <div class="reveal">
-        <div class="sg-label"><span data-lang="es">Competencias clave</span><span data-lang="en">Core skills</span></div>
-        <div class="sk"><span data-lang="es">Root Cause Analysis (RCA) aplicado a incidencias operativas</span><span data-lang="en">Root Cause Analysis (RCA) applied to operational incidents</span></div>
-        <div class="sk"><span data-lang="es">Gestión del ciclo Order-to-Cash</span><span data-lang="en">Order-to-Cash cycle management</span></div>
-        <div class="sk"><span data-lang="es">Estandarización de procesos con IA (SOPs)</span><span data-lang="en">AI-assisted process standardization (SOPs)</span></div>
-        <div class="sk"><span data-lang="es">Optimización de layouts y Bin Location</span><span data-lang="en">Layout optimization and bin-location systems</span></div>
-        <div class="sk"><span data-lang="es">Control y precisión de inventario (cycle counting)</span><span data-lang="en">Inventory control and accuracy (cycle counting)</span></div>
-        <div class="sk"><span data-lang="es">Seguimiento y análisis de KPIs operativos</span><span data-lang="en">Tracking and analysis of operational KPIs</span></div>
-        <div class="sk"><span data-lang="es">Toma de decisiones basada en datos (SQL en formación)</span><span data-lang="en">Data-driven decision making (SQL in progress)</span></div>
+      <h2 class="s-title" id="skills-title"><span data-lang="es">Habilidades e idiomas</span><span data-lang="en">Skills & languages</span></h2>
+      <div class="skills-grid">
+        <div>
+          <div class="sg-label"><span data-lang="es">Competencias clave</span><span data-lang="en">Core skills</span></div>
+          <div class="sk"><span data-lang="es">Root Cause Analysis (RCA)</span><span data-lang="en">Root Cause Analysis (RCA)</span></div>
+          <div class="sk"><span data-lang="es">Gestión Order-to-Cash</span><span data-lang="en">Order-to-Cash management</span></div>
+          <div class="sk"><span data-lang="es">Estandarización de procesos con IA</span><span data-lang="en">AI-assisted process standardization</span></div>
+          <div class="sk"><span data-lang="es">Bin Location / Layout</span><span data-lang="en">Bin Location / Layout optimization</span></div>
+          <div class="sk"><span data-lang="es">Control de inventario (cycle counting)</span><span data-lang="en">Inventory control (cycle counting)</span></div>
+          <div class="sk"><span data-lang="es">Análisis de KPIs operativos</span><span data-lang="en">Operational KPI analysis</span></div>
+        </div>
+        <div>
+          <div class="sg-label"><span data-lang="es">Idiomas</span><span data-lang="en">Languages</span></div>
+          <div class="lang-row"><span><span data-lang="es">Español</span><span data-lang="en">Spanish</span></span><span class="lv"><span data-lang="es">Nativo</span><span data-lang="en">Native</span></span></div>
+          <div class="lang-row"><span><span data-lang="es">Inglés</span><span data-lang="en">English</span></span><span class="lv"><span data-lang="es">Profesional</span><span data-lang="en">Professional</span></span></div>
+          <div class="lang-row"><span>Català</span><span class="lv"><span data-lang="es">Comprensión</span><span data-lang="en">Reading/Oral</span></span></div>
+        </div>
       </div>
-      <div class="reveal">
-        <div class="sg-label"><span data-lang="es">Idiomas</span><span data-lang="en">Languages</span></div>
-        <div class="lang-row"><span><span data-lang="es">Español</span><span data-lang="en">Spanish</span></span><span class="lv"><span data-lang="es">Nativo</span><span data-lang="en">Native</span></span></div>
-        <div class="lang-row"><span><span data-lang="es">Inglés</span><span data-lang="en">English</span></span><span class="lv"><span data-lang="es">Profesional</span><span data-lang="en">Professional</span></span></div>
-        <div class="lang-row"><span>Català</span><span class="lv"><span data-lang="es">Comprensión</span><span data-lang="en">Reading/Oral</span></span></div>
-      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- HIGHLIGHTS -->
-<section id="projects" class="sec-mid">
-  <div class="wrap">
-    <div class="reveal">
+  <!-- HIGHLIGHTS -->
+  <section id="highlights" aria-labelledby="hl-title">
+    <div class="wrap">
       <div class="s-label"><span data-lang="es">Logros</span><span data-lang="en">Highlights</span></div>
-      <h2 class="s-title"><span data-lang="es">Resultados clave</span><span data-lang="en">Key results</span></h2>
+      <h2 class="s-title" id="hl-title"><span data-lang="es">Resultados clave</span><span data-lang="en">Key results</span></h2>
+      <div class="hl-grid">
+        <article class="hl-card">
+          <p class="hl-num">01</p>
+          <h3 class="hl-title"><span data-lang="es">Order-to-Cash · Biotech marino</span><span data-lang="en">Order-to-Cash · Marine Biotech</span></h3>
+          <p class="hl-desc"><span data-lang="es">Gestión del ciclo completo en operaciones B2B internacionales en Aker BioMarine ASA.</span><span data-lang="en">End-to-end cycle management in international B2B operations at Aker BioMarine ASA.</span></p>
+        </article>
+        <article class="hl-card">
+          <p class="hl-num">02</p>
+          <h3 class="hl-title"><span data-lang="es">–50% tiempos de picking</span><span data-lang="en">–50% picking times</span></h3>
+          <p class="hl-desc"><span data-lang="es">Diseño e implantación del sistema Bin Location en Ronnefeldt, reduciendo a la mitad los tiempos de extracción.</span><span data-lang="en">Design and implementation of the Bin Location system at Ronnefeldt, halving extraction times.</span></p>
+        </article>
+        <article class="hl-card">
+          <p class="hl-num">03</p>
+          <h3 class="hl-title"><span data-lang="es">Procesos con IA</span><span data-lang="en">AI-powered processes</span></h3>
+          <p class="hl-desc"><span data-lang="es">Documentación de SOPs y automatización de flujos con herramientas de IA, reduciendo errores recurrentes.</span><span data-lang="en">SOP documentation and workflow automation using AI tools, reducing recurring errors.</span></p>
+        </article>
+        <article class="hl-card">
+          <p class="hl-num">04</p>
+          <h3 class="hl-title"><span data-lang="es">Fiabilidad bajo presión</span><span data-lang="en">Reliability under pressure</span></h3>
+          <p class="hl-desc"><span data-lang="es">Rendimiento constante bajo KPIs estrictos — de Amazon 3PL a biotech internacional.</span><span data-lang="en">Consistent performance under strict KPIs — from Amazon 3PL to international biotech.</span></p>
+        </article>
+      </div>
     </div>
-    <div class="hl-grid reveal">
-      <div class="hl-card">
-        <div class="hl-num">01</div>
-        <div class="hl-title"><span data-lang="es">Order-to-Cash · Biotech marino</span><span data-lang="en">Order-to-Cash · Marine Biotech</span></div>
-        <p class="hl-desc"><span data-lang="es">Gestión del ciclo completo en operaciones B2B internacionales con documentación de exportación y KPIs de servicio en Aker BioMarine.</span><span data-lang="en">End-to-end management of the order-to-cash cycle in international B2B operations at Aker BioMarine.</span></p>
-      </div>
-      <div class="hl-card">
-        <div class="hl-num">02</div>
-        <div class="hl-title"><span data-lang="es">–50% tiempos de picking</span><span data-lang="en">–50% picking times</span></div>
-        <p class="hl-desc"><span data-lang="es">Diseño e implantación del sistema Bin Location en Ronnefeldt World of Tea, reduciendo a la mitad los tiempos de extracción.</span><span data-lang="en">Design and implementation of the Bin Location system at Ronnefeldt, halving extraction times.</span></p>
-      </div>
-      <div class="hl-card">
-        <div class="hl-num">03</div>
-        <div class="hl-title"><span data-lang="es">Procesos con IA</span><span data-lang="en">AI-powered processes</span></div>
-        <p class="hl-desc"><span data-lang="es">Documentación de SOPs y automatización de flujos con herramientas de IA, reduciendo fricción operativa y errores recurrentes.</span><span data-lang="en">SOP documentation and workflow automation using AI tools, reducing friction and recurring errors.</span></p>
-      </div>
-      <div class="hl-card">
-        <div class="hl-num">04</div>
-        <div class="hl-title"><span data-lang="es">Fiabilidad bajo presión</span><span data-lang="en">Reliability under pressure</span></div>
-        <p class="hl-desc"><span data-lang="es">Rendimiento constante en entornos de KPIs estrictos y alto volumen, de Amazon 3PL a biotech internacional.</span><span data-lang="en">Consistent performance in strict-KPI, high-volume environments — from Amazon 3PL to international biotech.</span></p>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- CONTACT -->
-<section id="contact" class="sec-light">
-  <div class="wrap">
-    <div class="reveal">
+  <!-- CONTACT -->
+  <section id="contact" aria-labelledby="contact-title">
+    <div class="wrap">
       <div class="s-label"><span data-lang="es">Contacto</span><span data-lang="en">Contact</span></div>
-      <h2 class="s-title"><span data-lang="es">Hablemos</span><span data-lang="en">Let's talk</span></h2>
-    </div>
-    <div class="contact-grid">
-      <div class="reveal">
-        <p data-lang="es">¿Tienes un proyecto, una oportunidad, o simplemente quieres hablar de logística y operaciones?</p>
-        <p data-lang="en">Have a project, an opportunity, or just want to talk logistics and operations?</p>
-        <div class="c-links">
-          <a href="mailto:yezid@adarme.es"                          class="c-link"><span class="c-icon">@</span>yezid@adarme.es</a>
-          <a href="tel:+34646442497"                                 class="c-link"><span class="c-icon">☎</span>+34 646 442 497</a>
-          <a href="https://www.linkedin.com/in/yezidadarme/" target="_blank" class="c-link"><span class="c-icon">in</span>linkedin.com/in/yezidadarme</a>
+      <h2 class="s-title" id="contact-title"><span data-lang="es">Hablemos</span><span data-lang="en">Let's talk</span></h2>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <p data-lang="es">¿Tienes un proyecto, una oportunidad, o simplemente quieres hablar de logística y operaciones?</p>
+          <p data-lang="en">Have a project, an opportunity, or just want to talk logistics and operations?</p>
+          <nav class="c-links" aria-label="Links de contacto">
+            <a href="mailto:yezid@adarme.es" class="c-link"><span class="c-icon" aria-hidden="true">@</span>yezid@adarme.es</a>
+            <a href="tel:+34646442497"        class="c-link"><span class="c-icon" aria-hidden="true">☎</span>+34 646 442 497</a>
+            <a href="https://www.linkedin.com/in/yezidadarme/" target="_blank" rel="noopener" class="c-link"><span class="c-icon" aria-hidden="true">in</span>linkedin.com/in/yezidadarme</a>
+          </nav>
         </div>
+        <form class="c-form" aria-label="Formulario de contacto" onsubmit="return false;">
+          <div class="f-group">
+            <label class="f-label" for="f-name"><span data-lang="es">Nombre</span><span data-lang="en">Name</span></label>
+            <input id="f-name" type="text" class="f-input" autocomplete="name">
+          </div>
+          <div class="f-group">
+            <label class="f-label" for="f-email">Email</label>
+            <input id="f-email" type="email" class="f-input" autocomplete="email">
+          </div>
+          <div class="f-group">
+            <label class="f-label" for="f-msg"><span data-lang="es">Mensaje</span><span data-lang="en">Message</span></label>
+            <textarea id="f-msg" class="f-ta"></textarea>
+          </div>
+          <button class="f-btn" type="submit"><span data-lang="es">Enviar</span><span data-lang="en">Send</span></button>
+        </form>
       </div>
-      <form class="c-form reveal" onsubmit="return false;">
-        <div class="f-group">
-          <label class="f-label"><span data-lang="es">Nombre</span><span data-lang="en">Name</span></label>
-          <input type="text" class="f-input">
-        </div>
-        <div class="f-group">
-          <label class="f-label">Email</label>
-          <input type="email" class="f-input">
-        </div>
-        <div class="f-group">
-          <label class="f-label"><span data-lang="es">Mensaje</span><span data-lang="en">Message</span></label>
-          <textarea class="f-ta"></textarea>
-        </div>
-        <button class="f-btn"><span data-lang="es">Enviar</span><span data-lang="en">Send</span></button>
-      </form>
     </div>
-  </div>
-</section>
+  </section>
 
-<footer>
+</main>
+
+<footer role="contentinfo">
   <div class="foot">
     <span class="foot-copy">© 2026<span class="foot-dot">·</span>Yezid Adarme</span>
     <span class="foot-copy">adarme.es</span>
@@ -745,57 +694,137 @@
 </footer>
 
 <script>
-  const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-  (function loop(){
-    cur.style.left=mx+'px';cur.style.top=my+'px';
-    rx+=(mx-rx)*0.11;ry+=(my-ry)*0.11;
-    ring.style.left=rx+'px';ring.style.top=ry+'px';
-    requestAnimationFrame(loop);
-  })();
-  document.querySelectorAll('a,button').forEach(el=>{
-    el.addEventListener('mouseenter',()=>cur.classList.add('big'));
-    el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+const cv = document.getElementById('krill-canvas');
+const cx = cv.getContext('2d');
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isTouch = !window.matchMedia('(pointer: fine)').matches;
+
+function resize() { cv.width = window.innerWidth; cv.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize, { passive: true });
+
+let mx = window.innerWidth/2, my = window.innerHeight/2;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
+
+function drawKrill(x, y, rot, sc, alpha) {
+  cx.save();
+  cx.translate(x, y); cx.rotate(rot); cx.scale(sc, sc);
+  cx.globalAlpha = alpha;
+  const W = 1.8, H = 7;
+  cx.beginPath();
+  cx.moveTo(0,-H);
+  cx.bezierCurveTo(W*1.4,-H*0.5,W*1.5,H*0.3,W*0.3,H);
+  cx.bezierCurveTo(-W*0.3,H*1.1,-W*1.5,H*0.3,-W*1.4,-H*0.5);
+  cx.closePath();
+  const g = cx.createLinearGradient(0,-H,0,H);
+  g.addColorStop(0,'rgba(230,65,30,0.95)');
+  g.addColorStop(0.5,'rgba(200,38,12,0.88)');
+  g.addColorStop(1,'rgba(155,18,4,0.78)');
+  cx.fillStyle = g; cx.fill();
+  cx.strokeStyle='rgba(255,110,70,0.4)'; cx.lineWidth=0.4; cx.stroke();
+  cx.strokeStyle='rgba(255,90,50,0.85)'; cx.lineWidth=0.35; cx.lineCap='round';
+  [-0.4,-0.15,0.15,0.4].forEach((a,i)=>{
+    const L=[5,6,6,5][i], bx=Math.sin(a)*W*0.9, by=-H*0.82;
+    cx.beginPath(); cx.moveTo(bx,by);
+    cx.quadraticCurveTo(bx+Math.sin(a)*2,by-L*0.5,bx+Math.sin(a-0.2)*L,by-L*0.85);
+    cx.stroke();
   });
-
-  const nav=document.getElementById('nav');
-  window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>40));
-
-  document.querySelectorAll('section[id]').forEach(s=>{
-    new IntersectionObserver(entries=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting){
-          document.querySelectorAll('.nav-links a').forEach(l=>l.classList.remove('active'));
-          const l=document.querySelector(`.nav-links a[data-s="${e.target.id}"]`);
-          if(l)l.classList.add('active');
-        }
-      });
-    },{threshold:0.4}).observe(s);
+  cx.strokeStyle='rgba(220,70,40,0.65)'; cx.lineWidth=0.3;
+  [-H*0.15,H*0.12,H*0.35,H*0.55].forEach((py,i)=>{
+    const L=[3.5,4,3.5,3][i];
+    [-1,1].forEach(s=>{
+      cx.beginPath(); cx.moveTo(s*W*0.9,py);
+      cx.quadraticCurveTo(s*(W+L*0.4),py+L*0.2,s*(W+L*0.8),py+L*0.45);
+      cx.stroke();
+    });
   });
-
-  document.querySelectorAll('.reveal').forEach((el,i)=>{
-    el.style.transitionDelay=`${(i%4)*70}ms`;
-    new IntersectionObserver(entries=>{
-      entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});
-    },{threshold:0.1}).observe(el);
+  cx.strokeStyle='rgba(210,55,25,0.75)'; cx.lineWidth=0.35;
+  const tY=H*0.92,tW=W*0.85;
+  [[-tW,tY,-tW*1.7,tY+3.5],[-tW*0.3,tY,-tW*0.4,tY+4.5],[0,tY+0.4,0,tY+5],[tW*0.3,tY,tW*0.4,tY+4.5],[tW,tY,tW*1.7,tY+3.5]].forEach(([x1,y1,x2,y2])=>{
+    cx.beginPath(); cx.moveTo(x1,y1); cx.lineTo(x2,y2); cx.stroke();
   });
+  cx.fillStyle='rgba(255,190,140,0.9)';
+  cx.beginPath(); cx.ellipse(0,-H*0.76,1.1,0.9,0,0,Math.PI*2); cx.fill();
+  cx.fillStyle='rgba(60,10,0,0.9)';
+  cx.beginPath(); cx.ellipse(-0.35,-H*0.76,0.45,0.45,0,0,Math.PI*2); cx.fill();
+  cx.beginPath(); cx.ellipse(0.35,-H*0.76,0.45,0.45,0,0,Math.PI*2); cx.fill();
+  cx.restore();
+}
 
-  const words={
-    es:['Fiabilidad Operativa','Order-to-Cash','Mejora Continua','Procesos con IA'],
-    en:['Operational Reliability','Order-to-Cash','Continuous Improvement','AI-powered SOPs']
-  };
-  let wi=0;const rw=document.getElementById('rw');
-  setInterval(()=>{
-    rw.classList.add('fade');
-    setTimeout(()=>{wi=(wi+1)%4;rw.textContent=words[document.body.classList.contains('lang-en')?'en':'es'][wi];rw.classList.remove('fade');},350);
-  },2800);
+const N = 27;
+const krills = Array.from({length:N},(_,i)=>({
+  x:window.innerWidth/2, y:window.innerHeight/2,
+  vx:0, vy:0,
+  lag: 0.04+Math.random()*0.09,
+  offX:(Math.random()-0.5)*52,
+  offY:(Math.random()-0.5)*52,
+  phase:Math.random()*Math.PI*2,
+  freq: 0.02+Math.random()*0.03,
+  scale:0.55+Math.random()*0.7,
+  alpha:0.5+Math.random()*0.5,
+  rot:  Math.random()*Math.PI*2,
+}));
 
-  const lb=document.getElementById('lang-btn');
-  let lang=localStorage.getItem('ya-lang')||'es';
-  function applyLang(l){lang=l;document.body.classList.remove('lang-es','lang-en');document.body.classList.add('lang-'+l);lb.textContent=l==='es'?'EN':'ES';rw.textContent=words[l][wi];localStorage.setItem('ya-lang',l);}
-  applyLang(lang);
-  lb.addEventListener('click',()=>applyLang(lang==='es'?'en':'es'));
+let t=0;
+function loop(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  t++;
+  krills.forEach((k,i)=>{
+    const wave=Math.sin(t*k.freq+k.phase)*7;
+    const tx=mx+k.offX+Math.cos(t*0.013+i*0.48)*wave;
+    const ty=my+k.offY+Math.sin(t*0.013+i*0.48)*wave;
+    k.vx+=(tx-k.x)*k.lag; k.vy+=(ty-k.y)*k.lag;
+    k.vx*=0.7; k.vy*=0.7;
+    k.x+=k.vx; k.y+=k.vy;
+    const spd=Math.sqrt(k.vx*k.vx+k.vy*k.vy);
+    if(spd>0.3){
+      const tgt=Math.atan2(k.vy,k.vx)+Math.PI/2;
+      let d=tgt-k.rot;
+      while(d>Math.PI)d-=Math.PI*2; while(d<-Math.PI)d+=Math.PI*2;
+      k.rot+=d*0.18;
+    }
+    drawKrill(k.x,k.y,k.rot,k.scale,k.alpha);
+  });
+  requestAnimationFrame(loop);
+}
+
+if(!prefersReduced && !isTouch) { loop(); } else { cv.style.display='none'; }
+
+const nav=document.getElementById('topnav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>40),{passive:true});
+
+document.querySelectorAll('section[id]').forEach(s=>{
+  new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        document.querySelectorAll('.nav-links a').forEach(l=>l.classList.remove('active'));
+        const l=document.querySelector(`.nav-links a[data-s="${e.target.id}"]`);
+        if(l)l.classList.add('active');
+      }
+    });
+  },{threshold:0.35}).observe(s);
+});
+
+if(!prefersReduced){
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});
+  },{threshold:0.08});
+  document.querySelectorAll('section,.t-entry').forEach(el=>io.observe(el));
+} else {
+  document.querySelectorAll('section,.t-entry').forEach(el=>el.classList.add('visible'));
+}
+
+const lb=document.getElementById('lang-btn');
+let lang=localStorage.getItem('ya-lang')||'es';
+function applyLang(l){
+  lang=l; document.body.classList.remove('lang-es','lang-en');
+  document.body.classList.add('lang-'+l);
+  lb.textContent=l==='es'?'EN':'ES';
+  lb.setAttribute('aria-label',l==='es'?'Switch to English':'Cambiar a Español');
+  localStorage.setItem('ya-lang',l);
+}
+applyLang(lang);
+lb.addEventListener('click',()=>applyLang(lang==='es'?'en':'es'));
 </script>
 </body>
 </html>
